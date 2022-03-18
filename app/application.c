@@ -184,6 +184,8 @@ void gpio_test_get_voltage(int index)
 
     float vdda_voltage;
     twr_adc_get_vdda_voltage(&vdda_voltage);
+    
+    twr_log_debug("REF %.5f", vdda_voltage);
 
     float voltage = (adc * vdda_voltage) / 65536.f;
 
