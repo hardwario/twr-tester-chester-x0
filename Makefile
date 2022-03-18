@@ -1,23 +1,21 @@
-SDK_DIR ?= lib/twr-sdk
+SDK_DIR ?= sdk
 VERSION ?= vdev
-APP_DIR ?= src
-INC_DIR += include
 
 CFLAGS += -D'VERSION="${VERSION}"'
 
--include ${SDK_DIR}/Makefile.mk
+-include sdk/Makefile.mk
 
 .PHONY: all
 all: debug
 
 .PHONY: sdk
-sdk: lib/twr-sdk/Makefile.mk
+sdk: sdk/Makefile.mk
 
 .PHONY: update
 update:
-	@git submodule update --remote --merge lib/twr-sdk
-	# @git submodule update --remote --merge .vscode
+	@git submodule update --remote --merge sdk
+	@git submodule update --remote --merge .vscode
 
-lib/twr-sdk/Makefile.mk:
-	@git submodule update --init lib/twr-sdk
-	# @git submodule update --init .vscode
+sdk/Makefile.mk:
+	@git submodule update --init sdk
+	@git submodule update --init .vscode
