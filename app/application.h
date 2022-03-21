@@ -11,7 +11,7 @@
 
 typedef enum
 {
-    TEST_ADC = 0,
+    TEST_EXPANDER = 0,
     TEST_GPIO_1 = 1,
     TEST_GPIO_2 = 2,
     TEST_GPIO_3 = 3,
