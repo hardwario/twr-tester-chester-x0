@@ -53,7 +53,7 @@ bool twr_pcal6416aevj_set_pin_direction(twr_pcal6416aevj_t *self, twr_pcal6416ae
             port_direction |= 1 << (uint8_t) pin;
         }
 
-        if (!twr_i2c_memory_write_16b(self->_i2c_channel, self->_i2c_address, _TWR_PCAL6416AEVJ_PORT_1_CONFIGURATION_REGISTER, port_direction))
+        if (!twr_i2c_memory_write_8b(self->_i2c_channel, self->_i2c_address, _TWR_PCAL6416AEVJ_PORT_1_CONFIGURATION_REGISTER, port_direction))
         {
             return false;
         }
