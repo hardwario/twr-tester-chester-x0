@@ -5,6 +5,8 @@
 #define GPIO_TEST_SETUP_TIME 1500
 #define GPIO_SUB_TEST_STEP_WAIT_TIME 2000
 
+#define VDDA_VOLTAGE 3.3f
+
 #include <application.h>
 
 // LED instance
@@ -51,7 +53,6 @@ twr_pcal6416aevj_pin_t on_pin;
 twr_pcal6416aevj_pin_t pd_pin;
 twr_pcal6416aevj_pin_t cl_pin;
 twr_adc_channel_t adc_channel;
-
 
 void tester();
 void lcd_print_results();
@@ -193,16 +194,16 @@ void reset_gpio()
 
 // Get the voltage for each GPIO sub test
 void gpio_test_get_voltage(int index)
-{
+{    
+    float vdda_voltage = NAN;
+    twr_adc_get_vdda_voltage(&vdda_voltage);
+    
+    //twr_log_debug("REF %.5f", vdda_voltage);
+
     uint16_t adc;
     twr_adc_get_value(adc_channel, &adc);
 
-    float vdda_voltage;
-    twr_adc_get_vdda_voltage(&vdda_voltage);
-    
-    twr_log_debug("REF %.5f", vdda_voltage);
-
-    float voltage = (adc * vdda_voltage) / 65536.f;
+    float voltage = (adc * VDDA_VOLTAGE) / 65536.f;
 
     twr_log_debug("TEST %d: %.5f", index + 1, voltage);
     gpio_test_results_voltages[index] = voltage;
@@ -226,7 +227,8 @@ void gpio_test()
                 return;
             }
 
-            gpio_test_get_voltage(0);
+            twr_adc_calibration();
+            gpio_test_get_voltage(state);
 
             gpio_state = TEST_GPIO_STATE_2;
 
@@ -246,7 +248,8 @@ void gpio_test()
                 return;
             }
 
-            gpio_test_get_voltage(1);
+            twr_adc_calibration();
+            gpio_test_get_voltage(gpio_state);
 
             if(x0A_version)
             {
@@ -275,7 +278,8 @@ void gpio_test()
                 return;
             }
 
-            gpio_test_get_voltage(2);
+            twr_adc_calibration();
+            gpio_test_get_voltage(gpio_state);
             
             gpio_state = TEST_GPIO_STATE_4;
 
@@ -298,7 +302,8 @@ void gpio_test()
                 return;
             }
 
-            gpio_test_get_voltage(3);
+            twr_adc_calibration();
+            gpio_test_get_voltage(gpio_state);
             
             gpio_state = TEST_GPIO_STATE_5;
 
@@ -321,7 +326,8 @@ void gpio_test()
                 return;
             }
 
-            gpio_test_get_voltage(4);
+            twr_adc_calibration();
+            gpio_test_get_voltage(gpio_state);
             
             gpio_state = TEST_GPIO_STATE_DONE;
 
@@ -426,12 +432,18 @@ void application_init(void)
 
     // Initialize ADC
     twr_adc_init();
-    twr_adc_calibration();
 
     twr_adc_resolution_set(TWR_ADC_CHANNEL_A2, TWR_ADC_RESOLUTION_12_BIT);
+    twr_adc_oversampling_set(TWR_ADC_CHANNEL_A2, TWR_ADC_OVERSAMPLING_16);
+
     twr_adc_resolution_set(TWR_ADC_CHANNEL_A3, TWR_ADC_RESOLUTION_12_BIT);
+    twr_adc_oversampling_set(TWR_ADC_CHANNEL_A3, TWR_ADC_OVERSAMPLING_16);
+
     twr_adc_resolution_set(TWR_ADC_CHANNEL_A4, TWR_ADC_RESOLUTION_12_BIT);
+    twr_adc_oversampling_set(TWR_ADC_CHANNEL_A4, TWR_ADC_OVERSAMPLING_16);
+
     twr_adc_resolution_set(TWR_ADC_CHANNEL_A5, TWR_ADC_RESOLUTION_12_BIT);
+    twr_adc_oversampling_set(TWR_ADC_CHANNEL_A5, TWR_ADC_OVERSAMPLING_16);
 
     // Initialize LCD
     twr_module_lcd_init();

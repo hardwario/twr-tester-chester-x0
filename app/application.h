@@ -21,12 +21,12 @@ typedef enum
 
 typedef enum
 {
-    TEST_GPIO_STATE_1 = 1,
-    TEST_GPIO_STATE_2 = 2,
-    TEST_GPIO_STATE_3 = 3,
-    TEST_GPIO_STATE_4 = 4,
-    TEST_GPIO_STATE_5 = 5,
-    TEST_GPIO_STATE_DONE = 6
+    TEST_GPIO_STATE_1 = 0,
+    TEST_GPIO_STATE_2 = 1,
+    TEST_GPIO_STATE_3 = 2,
+    TEST_GPIO_STATE_4 = 3,
+    TEST_GPIO_STATE_5 = 4,
+    TEST_GPIO_STATE_DONE = 5
 
 } gpio_test_state;
 
