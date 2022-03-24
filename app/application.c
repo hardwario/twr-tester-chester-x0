@@ -2,9 +2,6 @@
 // SDK API description https://sdk.hardwario.com/
 // Forum https://forum.hardwario.com/
 
-#define GPIO_TEST_SETUP_TIME 1500
-#define GPIO_SUB_TEST_STEP_WAIT_TIME 2000
-
 #define VDDA_VOLTAGE 3.3f
 
 #include <application.h>
@@ -185,7 +182,7 @@ void gpio_test_get_voltage(int sub_test_index, twr_adc_channel_t adc_channel, fl
     uint16_t adc;
     twr_adc_get_value(adc_channel, &adc);
 
-    *voltage = (adc * vdda_voltage) / 65536.f;
+    *voltage = (adc * VDDA_VOLTAGE) / 65536.f;
 
     twr_log_debug("TEST %d: %.5f", sub_test_index + 1, *voltage);
 }
@@ -283,6 +280,13 @@ void tester()
         case GPIO_TEST:
             for(int test_index = 0; test_index < NUMBER_OF_GPIO_TESTS; test_index++)
             {
+                if(test_results[0] == false)
+                {
+                    twr_log_debug("jsem tu");
+                    test_results[test_index + 1] = false;
+                    test_progress++;
+                    continue;
+                }
                 reset_gpio(test_index);
                 delay();
 
