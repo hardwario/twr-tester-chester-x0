@@ -287,12 +287,18 @@ void tester()
                     test_progress++;
                     continue;
                 }
+
                 reset_gpio(test_index);
                 delay();
 
                 twr_log_debug("START OF GPIO TEST %d", test_index + 1);
                 for(int sub_test_index = 0; sub_test_index < NUMBER_OF_GPIO_SUB_TESTS; sub_test_index++)
                 {
+                    if(!x0A_version && sub_test_index == 2)
+                    {
+                        continue;
+                    }
+
                     gpio_set_test_pins(test_index, sub_test_index);
                     twr_adc_calibration();
                     delay();
